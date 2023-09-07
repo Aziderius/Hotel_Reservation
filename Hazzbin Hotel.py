@@ -15,8 +15,9 @@ class Client:
         self.phonenum = phonenum
         self.email = email
 
-class Reservation(Client):
-    def __init__(self, initial_date, final_date, type_room):
+class Reservation:
+    def __init__(self,client, initial_date, final_date, type_room,):
+        self.client = client
         self.initial_date = initial_date
         self.final_date = final_date
         self.type_room = type_room

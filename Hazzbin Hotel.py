@@ -26,21 +26,32 @@ def register_reservation():
     print("Welcome to Hazzbin Hotel reservation system,")
     print("please fill the fields correctly.")
 
-    name = input("Full name: ")
-    phonenum = input("Phone Number: ")
-    email = input("Email: ")
+    Client.name = input("Full name: ")
+    Reservation.client = Client.name
+    Client.phonenum = input("Phone Number: ")
+    Client.email = input("Email: ")
 
-    initial_date = input("Initial reservation date (YYYY-MM-DD): ")
+    Reservation.initial_date = input("Initial reservation date (YYYY-MM-DD): ")
     try:
         initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
     except ValueError:
         return False, "Invalid Input. Please use 'YYYY-MM-DD' format."
      
-    final_date = input("Final reservation date (YYYY-MM-DD): ")
+    Reservation.final_date = input("Final reservation date (YYYY-MM-DD): ")
     try:
         final_date = datetime.datetime.strptime(final_date, '%Y-%m-%d').date()
     except ValueError:
         return False, "Invalid Input. Please use 'YYYY-MM-DD' format."
     
-    type_room = input("Type of room (single, doble, luxury): ")
-    
+    Reservation.type_room = input("Type of room (single, doble, luxury): ")
+
+print(f"Reservation complete!")
+print(f"Host Name: {Client.name}")
+print(f"Phone number: {Client.phonenum}")
+print(f"Email: {Client.email}")
+print(f"Initial date: {Reservation.initial_date}")
+print(f"Final date: {Reservation.final_date}")
+print(f"Reserved room: {type_room} in the floor {floor}")
+print("Thanks to join us in Hazzbin Hotel!")
+
+register_reservation()

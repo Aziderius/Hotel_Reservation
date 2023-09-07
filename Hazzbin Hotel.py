@@ -9,10 +9,11 @@ rooms = {
     "floor_5": {"luxury1": True, "luxury2": True, "luxury3": True, "luxury4": True, "luxury5": True}
 }
 
-#Verificación de disponibilidad de habitación
+#Funcion de Verificación de disponibilidad de habitación
 def disponibility(floor, type_room):
     return rooms[floor].get(type_room, False)
 
+#Función para validación de fechas segun condiciones
 def validating_dates(initial_date, final_date):
     today = datetime.date.today()
     limit = today + datetime.timedelta(days=60)

@@ -42,16 +42,16 @@ print("Welcome to Hazzbin Hotel reservation system,")
 print("please fill the fields correctly.")
 
 name = input("Full name: ")
-if len(name) < 1:
-    name = "Antonio Wilson"
+if len(name) < 1:                  #solo para test
+    name = "Antonio Wilson"        #solo para test
 
 phonenum = input("Phone Number: ")
-if len(phonenum) < 1:
-    phonenum = "555-123-2658"
+if len(phonenum) < 1:              #solo para test
+    phonenum = "555-123-2658"      #solo para test
 
 email = input("Email: ")
-if len(email) < 1:
-    email = "elcacas@hazbin.com"
+if len(email) < 1:                 #solo para test
+    email = "elcacas@hazbin.com"   #solo para test
 
 initial_date = input("Initial reservation date (YYYY-MM-DD): ")
 try:

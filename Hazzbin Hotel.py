@@ -2,16 +2,15 @@ import datetime
 
 #Habitaciones disponibles del Hotel Hazzbin"
 rooms = {
-    "floor_1": {"single1": True, "single2": True, "single3": True, "single4": True, "single5": True},
-    "floor_2": {"single6": True, "single7": True, "single8": True, "single9": True, "single10": True},
-    "floor_3": {"double1": True, "double2": True, "double3": True, "double4": True, "double5": True},
-    "floor_4": {"double6": True, "double7": True, "double8": True, "double9": True, "double10": True},
-    "floor_5": {"luxury1": True, "luxury2": True, "luxury3": True, "luxury4": True, "luxury5": True}
+    "floor1": {"single1": True, "single2": True, "single3": True, "single4": True, "single5": True},
+    "floor2": {"single6": True, "single7": True, "single8": True, "single9": True, "single10": True},
+    "floor3": {"double1": True, "double2": True, "double3": True, "double4": True, "double5": True},
+    "floor4": {"double6": True, "double7": True, "double8": True, "double9": True, "double10": True},
+    "floor5": {"luxury1": True, "luxury2": True, "luxury3": True, "luxury4": True, "luxury5": True}
 }
 
 #Funcion de Verificación de disponibilidad de habitación
-def disponibility(floor, type_room):
-    return rooms[floor].get(type_room, False)
+
 
 #Función para validación de fechas segun condiciones
 def validating_dates(initial_date, final_date):
@@ -21,7 +20,7 @@ def validating_dates(initial_date, final_date):
         return "The initial date must be equal or after today"
     if final_date <= initial_date:
         return "The final date must be after the initial date"
-    if final_date > limit:
+    if initial_date > limit:
         return "You can't make a reservation within more than 60 days of anticipation"
     
 class Client:
@@ -74,10 +73,31 @@ type_room = type_room.lower()
 dates = validating_dates(initial_date, final_date)
 
 #rooms disponibility
-floor = None
+# Mapeo de tipos de habitaciones a pisos
+room_floor_mapping = {
+    "single": "floor2",
+    "single": "floor1",
+    "double": "floor4",
+    "double": "floor3",
+    "luxury": "floor5"
+}
 
-#Reservación de la habitación
-rooms[floor][type_room] = False
+# Verifica si el tipo de habitación proporcionado es válido
+if type_room in room_floor_mapping:
+    floor = room_floor_mapping[type_room]
+
+    # Busca una habitación disponible en el piso y cambia su valor a False
+    for room_to_change, value in rooms[floor].items():
+        if value:
+            rooms[floor][room_to_change] = False
+            found_room = True
+            print(f"\nThe room {room_to_change} on the {floor} is now reserved.")
+            break
+
+    if not found_room:
+        print(f"There is not rooms in this {floor}.")
+else:
+    print("please, write correctly the type room you want (single, double, luxury).")
 
 #OOP Cliente y  su reservación en Hazzbin Hotel
 guest = Client(name, phonenum, email)
@@ -92,5 +112,3 @@ print(f"Initial date: {guest_reservation.initial_date}")
 print(f"Final date: {guest_reservation.final_date}")
 print(f"Reserved room: {type_room} in the {floor}")
 print("Thanks to join us in Hazzbin Hotel!")
-
-#register_reservation()

@@ -9,9 +9,6 @@ rooms = {
     "floor5": {"luxury1": True, "luxury2": True, "luxury3": True, "luxury4": True, "luxury5": True}
 }
 
-#Funcion de Verificación de disponibilidad de habitación
-
-
 #Función para validación de fechas segun condiciones
 def validating_dates(initial_date, final_date):
     today = datetime.date.today()
@@ -20,7 +17,7 @@ def validating_dates(initial_date, final_date):
         return "The initial date must be equal or after today"
     if final_date <= initial_date:
         return "The final date must be after the initial date"
-    if initial_date > limit:
+    if final_date > limit:
         return "You can't make a reservation within more than 60 days of anticipation"
     
 class Client:

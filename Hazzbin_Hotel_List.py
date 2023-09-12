@@ -1,17 +1,18 @@
 import datetime
 
 #Listas de las habitaciones por piso
-rooms_available_single1 = ["single1", "single2", "single3", "single4", "single5"]
-rooms_available_single2 = ["single6", "single7", "single8", "single9", "single10"]
-rooms_available_double1 = ["double1", "double2", "double3", "double4", "double5"]
-rooms_available_double2 = ["double6", "double7", "double8", "double9", "double10"]
-rooms_available_luxury = ["luxury1", "luxury2", "luxury3", "luxury4", "luxury5"]
+rooms_available_single1 = []
+rooms_available_single2 = []
+rooms_available_double1 = []
+rooms_available_double2 = []
+rooms_available_luxury = []
 
-rooms_reserved_single1 = []
-rooms_reserved_single2 = []
-rooms_reserved_double1 = []
-rooms_reserved_double2 = []
-rooms_reserved_luxury = []
+# Diccionario para mapear los tipos de habitación a las listas correspondientes
+room_lists = {
+    "single": [rooms_available_single1, rooms_available_single2],
+    "double": [rooms_available_double1, rooms_available_double2],
+    "luxury": [rooms_available_luxury]
+}
 
 #lista de reservaciones
 list_reservations = []
@@ -24,23 +25,23 @@ class Client:
         self.email = email
 
 class Reservation:
-    def __init__(self, client, initial_date, final_date, type_room, num_room):
+    def __init__(self, client, initial_date, final_date, type_room, num_room, floor):
         self.client = client
         self.initial_date = initial_date
         self.final_date = final_date
         self.type_room = type_room
         self.num_room = num_room
+        self.floor = floor
 
 #Función para validación de fechas segun condiciones
 def validating_dates(initial_date, final_date):
     today = datetime.date.today()
-    limit = today + datetime.timedelta(days=60)
     if initial_date < today:
-        return "The initial date must be equal or after today"
+        return "The initial date must be after today"
     if final_date <= initial_date:
         return "The final date must be after the initial date"
-    if final_date > limit:
-        return "You can't make a reservation within more than 60 days of anticipation"
+    if (final_date - initial_date).days > 60:
+        return "You can't make a reservation with more than 60 days in advance"
     
 while True:
     #Entradas de datos del cliente
@@ -66,63 +67,39 @@ while True:
         print("Invalid Input. Please use 'YYYY-MM-DD' format.")
         quit()
 
+    date_validation_result = validating_dates(initial_date, final_date)
+    if date_validation_result:
+        print(date_validation_result)
+        continue
+
     type_room = input("Type of room (single, double, luxury): ")
-    if type_room == "done":
-        break
     type_room = type_room.lower()
 
-#Código para modificar listas de las habitaciones sencillas
-    if type_room == "single":
-        print("Rooms Available:\nFloor 1: ", rooms_available_single1, "\nFloor 2: ", rooms_available_single2)
-        num_room = input("Please, write the room you want to reserve: ")
-        if num_room == "done":
-            break
-        if num_room in rooms_available_single1:
-            rooms_reserved_single1.append(num_room)
-            rooms_reserved_single1.sort()
-            rooms_available_single1.remove(num_room)
-        if num_room in rooms_available_single2:
-            rooms_reserved_single2.append(num_room)
-            rooms_reserved_single2.sort()
-            rooms_available_single2.remove(num_room)
+    if type_room in room_lists:
+        room_list = room_lists[type_room]
+        for rooms in room_list:
+            if len(rooms) < 5:
+                rooms.append(f"{type_room}{len(rooms) + 1}")
+                break
         else:
-            print("This room is unavailable, please choose another room")
-
-#Código para modificar listas de las habitaciones dobles    
-    if type_room == "double":
-        print("Rooms Available:\nFloor 3: ", rooms_available_double1, "\nFloor 4: ", rooms_available_double2)
-        num_room = input("Please, write the room you want to reserve: ")
-        if num_room == "done":
-            break
-        if num_room in rooms_available_double1:
-            rooms_reserved_double1.append(num_room)
-            rooms_reserved_double1.sort()
-            rooms_available_double1.remove(num_room)
-        if num_room in rooms_available_double2:
-            rooms_reserved_double2.append(num_room)
-            rooms_reserved_double2.sort()
-            rooms_available_double2.remove(num_room)
-        else:
-            print("This room is unavailable, please choose another room")
-            continue
-
-#Código para modificar la lista de las habitaciones de lujo
-    if type_room == "luxury":
-        print("Rooms Available:\nFloor 5: ", rooms_available_luxury)
-        num_room = input("Please, write the room you want to reserve: ")
-        if num_room == "done":
-            break
-        if num_room in rooms_available_luxury:
-            rooms_reserved_luxury.append(num_room)
-            rooms_reserved_luxury.sort()
-            rooms_available_luxury.remove(num_room)
-        else:
-            print("This room is unavailable, please choose another room")
+            print("No available rooms of this type.")
     else:
         print("please write the type room correctly")
         continue
+
+    if f"{type_room}{len(rooms)}" in rooms_available_single1:
+        floor = "Floor 1"
+    elif f"{type_room}{len(rooms)}" in rooms_available_single2:
+        floor = "Floor 2"
+    elif f"{type_room}{len(rooms)}" in rooms_available_double1:
+        floor = "Floor 3"
+    elif f"{type_room}{len(rooms)}" in rooms_available_double2:
+        floor = "Floor 4"
+    elif f"{type_room}{len(rooms)}" in rooms_available_luxury:
+        floor = "Floor 5"
+    num_room = f"{type_room}{len(rooms)}"
     
-    reservation = Reservation(Client(name, phonenum, email), initial_date, final_date, type_room, num_room)
+    reservation = Reservation(Client(name, phonenum, email), initial_date, final_date, type_room, num_room, floor)
     list_reservations.append(reservation)
 
     print("\nReservation succesfully!\n")
@@ -134,17 +111,6 @@ print("Floor 3:", rooms_available_double1)
 print("Floor 4:", rooms_available_double2)
 print("Floor 5:", rooms_available_luxury, "\n")
 
-print("Rooms Occupied: ")
-print("Floor 1:", rooms_reserved_single1)
-print("Floor 2:", rooms_reserved_single2)
-print("Floor 3:", rooms_reserved_double1)
-print("Floor 4:", rooms_reserved_double2)
-print("Floor 5:", rooms_reserved_luxury, "\n")
-
-#OOP Cliente y  su reservación en Hazzbin Hotel
-guest = Client(name, phonenum, email)
-guest_reservation = Reservation(guest.name, initial_date, final_date, type_room, num_room)
-    
 #Mensaje de confirmación con datos del cliente
 print("Reservations:")
 for reservation in list_reservations:
@@ -153,5 +119,5 @@ for reservation in list_reservations:
     print(f"Email: {reservation.client.email}")
     print(f"Initial date: {reservation.initial_date}")
     print(f"Final date: {reservation.final_date}")
-    print(f"Reserved room: {reservation.type_room} in the {reservation.num_room}")
+    print(f"Reserved room: {reservation.num_room} on {reservation.floor}")
     print("------------")

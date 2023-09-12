@@ -52,6 +52,11 @@ while True:
     if name == "done":                 #para terminar el loop
         break
     phonenum = input("Phone Number: ")
+    try:
+        phonenum = int(phonenum)
+    except:
+        print("please enter your phone number correctly")
+        continue
     email = input("Email: ")
     initial_date = input("Initial reservation date (YYYY-MM-DD): ")
     try:
@@ -86,25 +91,26 @@ while True:
     else:
         print("please write the type room correctly")
         continue
-
-    if f"{type_room}{len(rooms)}" in rooms_available_single1:
-        floor = "Floor 1"
-    elif f"{type_room}{len(rooms)}" in rooms_available_single2:
-        floor = "Floor 2"
-    elif f"{type_room}{len(rooms)}" in rooms_available_double1:
-        floor = "Floor 3"
-    elif f"{type_room}{len(rooms)}" in rooms_available_double2:
-        floor = "Floor 4"
-    elif f"{type_room}{len(rooms)}" in rooms_available_luxury:
-        floor = "Floor 5"
+    
     num_room = f"{type_room}{len(rooms)}"
+
+    if num_room in rooms_available_single1:
+        floor = "Floor 1"
+    elif num_room in rooms_available_single2:
+        floor = "Floor 2"
+    elif num_room in rooms_available_double1:
+        floor = "Floor 3"
+    elif num_room in rooms_available_double2:
+        floor = "Floor 4"
+    elif num_room in rooms_available_luxury:
+        floor = "Floor 5"
     
     reservation = Reservation(Client(name, phonenum, email), initial_date, final_date, type_room, num_room, floor)
     list_reservations.append(reservation)
 
     print("\nReservation succesfully!\n")
 
-print("\nRooms available: ")
+print("\nRooms reserved: ")
 print("Floor 1:", rooms_available_single1)
 print("Floor 2:", rooms_available_single2)
 print("Floor 3:", rooms_available_double1)

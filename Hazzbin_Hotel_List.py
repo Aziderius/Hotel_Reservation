@@ -51,9 +51,6 @@ while True:
     name = input("Full name: (or write done to finish) ").upper()
     if name == "DONE":                 #para terminar el loop
         break
-    if any(reservation.client.name.upper() == name.upper() for reservation in list_reservations):
-        print("\nThis name is already registered.\n")
-        continue
 
     phonenum = input("Phone Number: ")
     try:
@@ -61,14 +58,8 @@ while True:
     except:
         print("please enter your phone number correctly")
         continue
-    if any(reservation.client.phonenum == phonenum for reservation in list_reservations):
-        print("\nThis phone number is already registered.\n")
-        continue
-
+    
     email = input("Email: ")
-    if any(reservation.client.email == email for reservation in list_reservations):
-        print("\nThis email is already registered.\n")
-        continue
 
     initial_date = input("Initial reservation date (YYYY-MM-DD): ")
     try:

@@ -48,16 +48,19 @@ while True:
     print("Welcome to Hazzbin Hotel reservation system,")
     print("please fill the fields correctly.")
 
-    name = input("Full name: (or write done to finish) ")
-    if name == "done":                 #para terminar el loop
+    name = input("Full name: (or write done to finish) ").upper()
+    if name == "DONE":                 #para terminar el loop
         break
+
     phonenum = input("Phone Number: ")
     try:
         phonenum = int(phonenum)
     except:
         print("please enter your phone number correctly")
         continue
+    
     email = input("Email: ")
+
     initial_date = input("Initial reservation date (YYYY-MM-DD): ")
     try:
         initial_date = datetime.datetime.strptime(initial_date, '%Y-%m-%d').date()
@@ -82,17 +85,17 @@ while True:
 
     if type_room in room_lists:
         room_list = room_lists[type_room]
+        if all(len(rooms) >= 5 for rooms in room_list):
+            print("\nThere's no more rooms available for this type.\nPlease choose another room type\n")
+            continue
         for rooms in room_list:
             if len(rooms) < 5:
-                rooms.append(f"{type_room}{len(rooms) + 1}")
-                break
-        else:
-            print("No available rooms of this type.")
+                num_room = f"{type_room}{len(rooms) + 1}"
+                rooms.append(num_room)
+                break 
     else:
         print("please write the type room correctly")
         continue
-    
-    num_room = f"{type_room}{len(rooms)}"
 
     if num_room in rooms_available_single1:
         floor = "Floor 1"
